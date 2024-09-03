@@ -1,11 +1,17 @@
 package com.example.emazon.adapters.driving.http.dto.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+
 
 @AllArgsConstructor
 @Getter
-public class AddCategoryRequest {
-    private final String name;
-    private final String description;
+@Builder //Este es un patrón de diseño que se utiliza para crear objetos complejos, en este caso, el objeto AddCategoryRequest
+public class AddCategoryRequest{
+
+        String name;
+        String description;
+
+
 }

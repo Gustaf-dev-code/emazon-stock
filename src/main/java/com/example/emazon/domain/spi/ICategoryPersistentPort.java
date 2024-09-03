@@ -11,4 +11,5 @@ public interface ICategoryPersistentPort {
     Category getCategoryById(Integer id);
     Category updateCategory(Category category);
     void deleteById(Integer id);
+
 }

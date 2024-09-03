@@ -1,5 +1,7 @@
 package com.example.emazon.domain.api.usecase;
 
+import com.example.emazon.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
+import com.example.emazon.configuration.Constants;
 import com.example.emazon.domain.api.ICategoryServicePort;
 import com.example.emazon.domain.model.Category;
 import com.example.emazon.domain.spi.ICategoryPersistentPort;
@@ -15,7 +17,7 @@ public class CategoryUseCase implements ICategoryServicePort {
     }
     @Override
     public Category save(Category category) {
-        return categoryPersistentPort.save(category);
+         return categoryPersistentPort.save(category);
     }
 
     @Override
@@ -42,4 +44,5 @@ public class CategoryUseCase implements ICategoryServicePort {
     public void deleteById(Integer id) {
         categoryPersistentPort.deleteById(id);
     }
+
 }

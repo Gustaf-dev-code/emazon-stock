@@ -2,11 +2,11 @@ package com.example.emazon.adapters.driven.jpa.mysql.adapter;
 
 
 import com.example.emazon.adapters.driven.jpa.mysql.entity.CategoryEntity;
-import com.example.emazon.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistException;
 import com.example.emazon.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.example.emazon.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.example.emazon.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapper;
 import com.example.emazon.adapters.driven.jpa.mysql.repository.ICategoryRepository;
+import com.example.emazon.configuration.Constants;
 import com.example.emazon.domain.model.Category;
 import com.example.emazon.domain.spi.ICategoryPersistentPort;
 
@@ -23,16 +23,9 @@ public class CategoryAdapter implements ICategoryPersistentPort {
 
     @Override
     public Category save(Category category) {
-        if(category.getId() != null){
-            if(categoryRepository.findById(category.getId()).isPresent()){
-                throw new CategoryAlreadyExistException("Category already exist with same ID");
-            }
-        }
-        if(categoryRepository.findByName(category.getName()).isPresent()){
-            throw new CategoryAlreadyExistException("Category already exist");
-        }
         return categoryEntityMapper.toModel(categoryRepository.save(categoryEntityMapper.toEntity(category)));
     }
+
 
     @Override
     public Category getCategoryByName(String name) {
@@ -53,14 +46,14 @@ public class CategoryAdapter implements ICategoryPersistentPort {
     @Override
     public Category getCategoryById(Integer id) {
         CategoryEntity categoryEntity = categoryRepository.findById(id)
-                .orElseThrow(() -> new ElementNotFoundException("Category not found with id: " + id));
+                .orElseThrow(() -> new ElementNotFoundException(Constants.CATEGORY_NOT_FOUND_BY_ID));
         return categoryEntityMapper.toModel(categoryEntity);
     }
 
     @Override
     public Category updateCategory(Category category) {
         if(categoryRepository.findById(category.getId()).isEmpty()){
-            throw new ElementNotFoundException("Category not found with id: " + category.getId());
+            throw new ElementNotFoundException(Constants.CATEGORY_NOT_FOUND_BY_ID);
         }
         return categoryEntityMapper.toModel(categoryRepository.save(categoryEntityMapper.toEntity(category)));
     }
@@ -68,8 +61,9 @@ public class CategoryAdapter implements ICategoryPersistentPort {
     @Override
     public void deleteById(Integer id) {
         if(categoryRepository.findById(id).isEmpty()){
-            throw new ElementNotFoundException("Category not found with id: " + id);
+            throw new ElementNotFoundException(Constants.CATEGORY_NOT_FOUND_BY_ID);
         }
         categoryRepository.deleteById(id);
     }
+
 }

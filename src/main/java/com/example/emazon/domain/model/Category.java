@@ -1,6 +1,6 @@
 package com.example.emazon.domain.model;
 
-import com.example.emazon.domain.exception.MaxCharLenght;
+import com.example.emazon.domain.exception.MaxCharAllowedException;
 import com.example.emazon.domain.util.CategoryConstants;
 import com.example.emazon.domain.exception.EmptyFieldException;
 
@@ -12,18 +12,17 @@ public class Category {
     private final String description;
 
     public Category(Integer id, String name, String description) {
-
         if(name.trim().isEmpty()){
             throw new EmptyFieldException(CategoryConstants.Field.NAME.toString());
         }
         if(name.length() > 50){
-            throw new MaxCharLenght(CategoryConstants.Field.NAME.toString());
+            throw new MaxCharAllowedException(CategoryConstants.Field.NAME.toString());
         }
         if(description.trim().isEmpty()){
             throw new EmptyFieldException(CategoryConstants.Field.DESCRIPTION.toString());
         }
         if(description.length() > 90){
-            throw new MaxCharLenght(CategoryConstants.Field.DESCRIPTION.toString());
+            throw new MaxCharAllowedException(CategoryConstants.Field.DESCRIPTION.toString());
         }
 
         this.id = id;

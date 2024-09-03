@@ -14,6 +14,7 @@ public interface ICategoryRequestMapper {
     @Mapping(source = "description", target = "description")
     Category addRequestToCategory(AddCategoryRequest addCategoryRequest);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "description", target = "description")
     Category updateRequestToCategory(UpdateCategoryRequest updateCategoryRequest);

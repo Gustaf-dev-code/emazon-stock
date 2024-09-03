@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdateCategoryRequest {
-    private final Integer id;
-    private final String name;
-    private final String description;
-
+    Integer id;
+    String name;
+    String description;
 }
