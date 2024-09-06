@@ -128,7 +128,7 @@ public class CategoryRestControllerAdapter {
                     responseCode = "200",
                     description = "Successfully retrieved list of categories with pagination.",
                     content = @Content(schema = @Schema(implementation = PaginatedResponseDto.class))
-            )
+            ),
             @ApiResponse(
                     responseCode = "400",
                     description = "Invalid input data",

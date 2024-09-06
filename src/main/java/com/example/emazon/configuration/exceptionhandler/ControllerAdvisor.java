@@ -4,10 +4,7 @@ import com.example.emazon.adapters.driven.jpa.mysql.exception.CategoryAlreadyExi
 import com.example.emazon.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.example.emazon.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.example.emazon.configuration.Constants;
-import com.example.emazon.domain.exception.EmptyFieldException;
-import com.example.emazon.domain.exception.InvalidNumberPageException;
-import com.example.emazon.domain.exception.MaxCharAllowedException;
-import com.example.emazon.domain.exception.NegativeNotAllowedException;
+import com.example.emazon.domain.exception.*;
 import com.example.emazon.domain.util.PaginationConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.swing.plaf.PanelUI;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -47,6 +45,12 @@ public class ControllerAdvisor {
     @ExceptionHandler(InvalidNumberPageException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidNumberPageException() {
         String errorMessage = PaginationConstants.INVALID_NUMBER_PAGE_EXCEPTION_MESSAGE;
+        return buildResponse(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidSizePageException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidSizePageException() {
+        String errorMessage = PaginationConstants.INVALID_SIZE_PAGE_EXCEPTION_MESSAGE;
         return buildResponse(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
