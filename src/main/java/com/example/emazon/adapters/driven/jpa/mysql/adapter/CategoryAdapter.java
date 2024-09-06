@@ -8,9 +8,17 @@ import com.example.emazon.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapper
 import com.example.emazon.adapters.driven.jpa.mysql.repository.ICategoryRepository;
 import com.example.emazon.configuration.Constants;
 import com.example.emazon.domain.model.Category;
+import com.example.emazon.domain.model.PaginatedResponse;
+import com.example.emazon.domain.model.PaginationRequest;
+import com.example.emazon.domain.model.SortDirection;
 import com.example.emazon.domain.spi.ICategoryPersistentPort;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryAdapter implements ICategoryPersistentPort {
     private final ICategoryRepository categoryRepository;
@@ -22,9 +30,36 @@ public class CategoryAdapter implements ICategoryPersistentPort {
     }
 
     @Override
+    public PaginatedResponse<Category> getAllCategoriesPaginated(PaginationRequest paginationRequest) {
+        // Convierte PaginationRequest a Pageable
+        Pageable pageable = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize(),
+                Sort.by(paginationRequest.getSortDirection() == SortDirection.ASC
+                        ? Sort.Direction.ASC
+                        : Sort.Direction.DESC, paginationRequest.getSortBy()));
+
+        // Consulta la base de datos paginada
+        Page<CategoryEntity> categoryEntitiesPage = categoryRepository.findAll(pageable);
+
+        // Mapea las entidades a objetos de dominio
+        List<Category> categories = categoryEntitiesPage.getContent().stream()
+                .map(categoryEntityMapper::toModel)
+                .collect(Collectors.toList());
+
+        // Retorna la respuesta paginada
+        return new PaginatedResponse<>(
+                categories,
+                categoryEntitiesPage.getNumber(),
+                categoryEntitiesPage.getTotalPages(),
+                categoryEntitiesPage.getTotalElements()
+        );
+    }
+
+    @Override
     public Category save(Category category) {
         return categoryEntityMapper.toModel(categoryRepository.save(categoryEntityMapper.toEntity(category)));
     }
+
+
 
 
     @Override
@@ -38,7 +73,7 @@ public class CategoryAdapter implements ICategoryPersistentPort {
     public List<Category> getAllCategories() {
         List<CategoryEntity> categoryEntities = categoryRepository.findAll();
         if (categoryEntities.isEmpty()) {
-            throw new NoDataFoundException("No data found");
+            throw new NoDataFoundException(Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE);
         }
         return categoryEntityMapper.toModelList(categoryEntities);
     }

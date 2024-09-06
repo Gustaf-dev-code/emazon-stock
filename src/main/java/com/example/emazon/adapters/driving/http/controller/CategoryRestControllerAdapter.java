@@ -1,13 +1,19 @@
 package com.example.emazon.adapters.driving.http.controller;
 
 import com.example.emazon.adapters.driving.http.dto.request.AddCategoryRequest;
+import com.example.emazon.adapters.driving.http.dto.request.PaginationRequestDto;
 import com.example.emazon.adapters.driving.http.dto.request.UpdateCategoryRequest;
 import com.example.emazon.adapters.driving.http.dto.response.CategoryResponse;
+import com.example.emazon.adapters.driving.http.dto.response.PaginatedResponseDto;
 import com.example.emazon.adapters.driving.http.mapper.ICategoryRequestMapper;
 import com.example.emazon.adapters.driving.http.mapper.ICategoryResponseMapper;
+import com.example.emazon.adapters.driving.http.mapper.IPaginatedResponseMapper;
+import com.example.emazon.adapters.driving.http.mapper.IPaginationRequestMapper;
 import com.example.emazon.configuration.exceptionhandler.ExceptionResponse;
 import com.example.emazon.domain.api.ICategoryServicePort;
 import com.example.emazon.domain.model.Category;
+import com.example.emazon.domain.model.PaginatedResponse;
+import com.example.emazon.domain.model.PaginationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,10 +36,16 @@ public class CategoryRestControllerAdapter {
     private final ICategoryResponseMapper categoryResponseMapper;
     private final  ICategoryRequestMapper categoryRequestMapper;
 
-    public CategoryRestControllerAdapter(ICategoryServicePort categoryServicePort, ICategoryResponseMapper categoryResponseMapper, ICategoryRequestMapper categoryRequestMapper) {
+    private final IPaginationRequestMapper paginationRequestMapper;
+
+    private final IPaginatedResponseMapper paginatedResponseMapper;
+
+    public CategoryRestControllerAdapter(ICategoryServicePort categoryServicePort, ICategoryResponseMapper categoryResponseMapper, ICategoryRequestMapper categoryRequestMapper, IPaginationRequestMapper paginationRequestMapper, IPaginatedResponseMapper paginatedResponseMapper) {
         this.categoryServicePort = categoryServicePort;
         this.categoryResponseMapper = categoryResponseMapper;
         this.categoryRequestMapper = categoryRequestMapper;
+        this.paginationRequestMapper = paginationRequestMapper;
+        this.paginatedResponseMapper = paginatedResponseMapper;
     }
 
     @Operation(
@@ -105,6 +117,42 @@ public class CategoryRestControllerAdapter {
                                                               @Parameter(description = "Name of the category to be fetched", example = "Electronics", required = true)
                                                               String name ) {
         return ResponseEntity.ok(categoryResponseMapper.toCategoryResponse(categoryServicePort.getCategoryByName(name)));
+    }
+
+    @Operation(
+            summary = "Get all categories with pagination.",
+            description = "Fetches a list of all categories with pagination."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved list of categories with pagination.",
+                    content = @Content(schema = @Schema(implementation = PaginatedResponseDto.class))
+            )
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid input data",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            )
+    })
+    @GetMapping
+    public ResponseEntity<PaginatedResponseDto<CategoryResponse>> getCategoriesPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortDirection) {
+
+        // Crear PaginationRequestDto con los parámetros recibidos
+        PaginationRequestDto paginationRequestDto = new PaginationRequestDto(page, size, sortBy, sortDirection);
+
+        // Mapear PaginationRequestDto a PaginationRequest y obtener categorías paginadas
+        PaginationRequest paginationRequest = paginationRequestMapper.toPaginationRequest(paginationRequestDto);
+        PaginatedResponse<Category> paginatedCategories = categoryServicePort.getAllCategoriesPaginated(paginationRequest);
+
+        // Mapear PaginatedResponse<Category> a PaginatedResponseDto<CategoryDto>
+        PaginatedResponseDto<CategoryResponse> responseDto = paginatedResponseMapper.toPaginatedResponseDto(paginatedCategories);
+
+        return ResponseEntity.ok(responseDto);
     }
 
     @Operation(

@@ -13,5 +13,5 @@ public class Constants {
     public static final String EMPTY_FIELD_EXCEPTION_MESSAGE = "Field %s can not be empty";
     public static final String NEGATIVE_NOT_ALLOWED_EXCEPTION_MESSAGE = "Field %s can not receive negative values";
     public static final String MAX_CHAR_ALLOWED_EXCEPTION_MESSAGE = "Field %s can not exceed the maximum number of characters";
-    public static final String REPEATING_CATEGORY_NAME_NOT_ALLOWED_EXCEPTION_MESSAGE = "Repeating category name not allowed";
+
 }

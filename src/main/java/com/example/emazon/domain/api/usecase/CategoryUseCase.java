@@ -1,9 +1,9 @@
 package com.example.emazon.domain.api.usecase;
 
-import com.example.emazon.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
-import com.example.emazon.configuration.Constants;
 import com.example.emazon.domain.api.ICategoryServicePort;
 import com.example.emazon.domain.model.Category;
+import com.example.emazon.domain.model.PaginatedResponse;
+import com.example.emazon.domain.model.PaginationRequest;
 import com.example.emazon.domain.spi.ICategoryPersistentPort;
 
 import java.util.List;
@@ -25,6 +25,11 @@ public class CategoryUseCase implements ICategoryServicePort {
         return categoryPersistentPort.getCategoryByName(name);
     }
 
+
+    @Override
+    public PaginatedResponse<Category> getAllCategoriesPaginated(PaginationRequest paginationRequest) {
+        return categoryPersistentPort.getAllCategoriesPaginated(paginationRequest);
+    }
     @Override
     public List<Category> getAllCategories() {
         return categoryPersistentPort.getAllCategories();
