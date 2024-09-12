@@ -1,5 +1,6 @@
 package com.example.emazon.adapters.driving.http.controller;
 
+import com.example.emazon.adapters.driven.jpa.mysql.exception.InvalidSortDirectionException;
 import com.example.emazon.adapters.driving.http.dto.request.AddCategoryRequest;
 import com.example.emazon.adapters.driving.http.dto.request.PaginationRequestDto;
 import com.example.emazon.adapters.driving.http.dto.request.UpdateCategoryRequest;
@@ -9,6 +10,7 @@ import com.example.emazon.adapters.driving.http.mapper.ICategoryRequestMapper;
 import com.example.emazon.adapters.driving.http.mapper.ICategoryResponseMapper;
 import com.example.emazon.adapters.driving.http.mapper.IPaginatedResponseMapper;
 import com.example.emazon.adapters.driving.http.mapper.IPaginationRequestMapper;
+import com.example.emazon.configuration.Constants;
 import com.example.emazon.configuration.exceptionhandler.ExceptionResponse;
 import com.example.emazon.domain.api.ICategoryServicePort;
 import com.example.emazon.domain.model.Category;
@@ -141,6 +143,11 @@ public class CategoryRestControllerAdapter {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "ASC") String sortDirection) {
+
+        sortDirection = sortDirection.toUpperCase();
+        if(!sortDirection.equals("ASC") && !sortDirection.equals("DESC")) {
+            throw new InvalidSortDirectionException(Constants.INVALID_SORT_DIRECTION_EXCEPTION_MESSAGE);
+        }
 
         // Crear PaginationRequestDto con los parámetros recibidos
         PaginationRequestDto paginationRequestDto = new PaginationRequestDto(page, size, sortBy, sortDirection);

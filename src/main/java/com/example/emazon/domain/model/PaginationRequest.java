@@ -8,7 +8,7 @@ public class PaginationRequest {
     private final int page;
     private final int size;
     private final String sortBy;
-    private final SortDirection sortDirection;
+    private SortDirection sortDirection;
 
     public PaginationRequest(Integer page, Integer size, String sortBy, SortDirection sortDirection) {
 
@@ -58,5 +58,7 @@ public class PaginationRequest {
         return sortDirection;
     }
 
-
+    public void setSortDirection(SortDirection sortDirection) {
+        this.sortDirection = sortDirection;
+    }
 }

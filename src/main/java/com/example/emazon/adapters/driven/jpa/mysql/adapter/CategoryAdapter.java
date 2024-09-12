@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CategoryAdapter implements ICategoryPersistentPort {
     private final ICategoryRepository categoryRepository;
@@ -43,7 +42,7 @@ public class CategoryAdapter implements ICategoryPersistentPort {
         // Mapea las entidades a objetos de dominio
         List<Category> categories = categoryEntitiesPage.getContent().stream()
                 .map(categoryEntityMapper::toModel)
-                .collect(Collectors.toList());
+                .toList();
 
         // Retorna la respuesta paginada
         return new PaginatedResponse<>(
