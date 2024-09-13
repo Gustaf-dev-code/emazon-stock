@@ -96,9 +96,7 @@ class CategoryUseCaseTest {
 
     @Test
     void testGetAllCategoriesPaginated_InvalidPageNumber() {
-        Exception exception = assertThrows(InvalidNumberPageException.class, () -> {
-            new PaginationRequest(-1, 10, "name", SortDirection.ASC);
-        });
+        Exception exception = assertThrows(InvalidNumberPageException.class, () -> new PaginationRequest(-1, 10, "name", SortDirection.ASC));
 
         assertEquals(PaginationConstants.INVALID_NUMBER_PAGE_EXCEPTION_MESSAGE, exception.getMessage());
     }

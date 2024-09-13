@@ -1,10 +1,11 @@
 package com.example.emazon.domain.api.usecase;
 
 import com.example.emazon.domain.api.IBrandServicePort;
+import com.example.emazon.domain.exception.EmptyFieldException;
 import com.example.emazon.domain.exception.EntityAlreadyExistsException;
 import com.example.emazon.domain.model.Brand;
 import com.example.emazon.domain.spi.IBrandPersistentPort;
-import com.example.emazon.domain.util.BrandConstants;
+import com.example.emazon.domain.util.DomainConstants;
 
 import java.util.List;
 
@@ -19,13 +20,16 @@ public class BrandUseCase implements IBrandServicePort {
     @Override
     public Brand saveBrand(Brand brand) {
         if(brandPersistentPort.existsByName(brand.getName())){
-            throw new EntityAlreadyExistsException(BrandConstants.Field.NAME.toString());
+            throw new EntityAlreadyExistsException("Brand", DomainConstants.Field.NAME.toString(), brand.getName());
         }
         return brandPersistentPort.saveBrand(brand);
     }
 
     @Override
     public Brand getBrandByName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
+        }
         return brandPersistentPort.getBrandByName(name);
     }
 

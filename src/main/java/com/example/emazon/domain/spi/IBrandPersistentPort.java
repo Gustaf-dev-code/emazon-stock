@@ -13,4 +13,5 @@ public interface IBrandPersistentPort {
 
     boolean existsByName(String name);
 
+
 }

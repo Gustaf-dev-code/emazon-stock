@@ -39,7 +39,7 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleEntityAlreadyExistsException(EntityAlreadyExistsException e) {
-        String errorMessage = String.format(Constants.ENTITY_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getMessage());
+        String errorMessage = String.format(Constants.ENTITY_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getEntityName(), e.getFieldName(), e.getValue());
         return buildResponse(errorMessage, HttpStatus.CONFLICT);
     }
 
@@ -80,8 +80,8 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(ElementNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleElementNotFoundException() {
-        String errorMessage = Constants.ELEMENT_NOT_FOUND_EXCEPTION_MESSAGE;
+    public ResponseEntity<ExceptionResponse> handleElementNotFoundException(ElementNotFoundException e) {
+        String errorMessage = String.format(Constants.ELEMENT_NOT_FOUND_EXCEPTION_MESSAGE,e.getEntity(), e.getField(), e.getValue());
         return buildResponse(errorMessage, HttpStatus.NOT_FOUND);
     }
 

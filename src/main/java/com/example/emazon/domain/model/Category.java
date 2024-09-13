@@ -1,8 +1,8 @@
 package com.example.emazon.domain.model;
 
 import com.example.emazon.domain.exception.MaxCharAllowedException;
-import com.example.emazon.domain.util.CategoryConstants;
 import com.example.emazon.domain.exception.EmptyFieldException;
+import com.example.emazon.domain.util.DomainConstants;
 
 import static java.util.Objects.requireNonNull;
 
@@ -13,21 +13,21 @@ public class Category {
 
     public Category(Integer id, String name, String description) {
         if(name.trim().isEmpty()){
-            throw new EmptyFieldException(CategoryConstants.Field.NAME.toString());
+            throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
         }
-        if(name.length() > 50){
-            throw new MaxCharAllowedException(CategoryConstants.Field.NAME.toString());
+        if(name.length() < DomainConstants.FIELD_NAME_MIN_SIZE || name.length() > DomainConstants.FIELD_NAME_MAX_SIZE){
+            throw new MaxCharAllowedException(DomainConstants.FIELD_NAME_SIZE_MESSAGE);
         }
         if(description.trim().isEmpty()){
-            throw new EmptyFieldException(CategoryConstants.Field.DESCRIPTION.toString());
+            throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
         }
-        if(description.length() > 90){
-            throw new MaxCharAllowedException(CategoryConstants.Field.DESCRIPTION.toString());
+        if(description.length() < DomainConstants.FIELD_DESCRIPTION_MIN_SIZE || description.length() > DomainConstants.FIELD_DESCRIPTION_CATEGORY_MAX_SIZE){
+            throw new MaxCharAllowedException(DomainConstants.FIELD_DESCRIPTION_CATEGORY_SIZE_MESSAGE);
         }
 
         this.id = id;
-        this.name = requireNonNull(name, CategoryConstants.FIELD_NAME_NULL_MESSAGE);
-        this.description =requireNonNull(description, CategoryConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
+        this.name = requireNonNull(name, DomainConstants.FIELD_NAME_NULL_MESSAGE);
+        this.description =requireNonNull(description, DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
     }
 
     public Integer getId() {
