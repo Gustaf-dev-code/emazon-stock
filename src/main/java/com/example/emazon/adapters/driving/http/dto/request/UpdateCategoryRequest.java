@@ -10,10 +10,10 @@ import lombok.Setter;
 @Setter
 @Schema(description = "Request object for updating a category")
 public class UpdateCategoryRequest {
-    @Schema(description = "Id of the category", example = "1", required = true)
+    @Schema(description = "Id of the category", example = "1",  requiredMode = Schema.RequiredMode.REQUIRED)
     Integer id;
-    @Schema(description = "Name of the category", example = "Devices and gadgets", required = true)
+    @Schema(description = "Name of the category", example = "Devices and gadgets",  requiredMode = Schema.RequiredMode.REQUIRED)
     String name;
-    @Schema(description = "Description of the category", example = "Devices and gadgets", required = true)
+    @Schema(description = "Description of the category", example = "Devices and gadgets",  requiredMode = Schema.RequiredMode.REQUIRED)
     String description;
 }

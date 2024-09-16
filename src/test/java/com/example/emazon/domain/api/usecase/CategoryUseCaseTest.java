@@ -9,6 +9,7 @@ import com.example.emazon.domain.model.PaginationRequest;
 import com.example.emazon.domain.model.SortDirection;
 import com.example.emazon.domain.spi.ICategoryPersistentPort;
 import com.example.emazon.domain.util.PaginationConstants;
+import com.example.emazon.domain.util.PaginationValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,13 +32,16 @@ class CategoryUseCaseTest {
     @MockBean //Crea instancias simuladas (mock) de las interfaces que se inyectan en el controlador.
     private ICategoryPersistentPort categoryPersistentPort;
 
+    @MockBean
+    private PaginationValidator paginationValidator;
+
     @InjectMocks // Inyecta los mocks en la clase que se va a probar
     private CategoryUseCase categoryUseCase;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Inicializamos los mocks antes de cada test
-        categoryUseCase = new CategoryUseCase(categoryPersistentPort);// Inicializamos el caso de uso
+        categoryUseCase = new CategoryUseCase(categoryPersistentPort,paginationValidator);// Inicializamos el caso de uso
     }
 
     @Test
@@ -92,9 +96,7 @@ class CategoryUseCaseTest {
 
     @Test
     void testGetAllCategoriesPaginated_InvalidPageNumber() {
-        Exception exception = assertThrows(InvalidNumberPageException.class, () -> {
-            new PaginationRequest(-1, 10, "name", SortDirection.ASC);
-        });
+        Exception exception = assertThrows(InvalidNumberPageException.class, () -> new PaginationRequest(-1, 10, "name", SortDirection.ASC));
 
         assertEquals(PaginationConstants.INVALID_NUMBER_PAGE_EXCEPTION_MESSAGE, exception.getMessage());
     }

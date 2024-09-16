@@ -2,6 +2,7 @@ package com.example.emazon.configuration.exceptionhandler;
 
 import com.example.emazon.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
 import com.example.emazon.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
+import com.example.emazon.adapters.driven.jpa.mysql.exception.InvalidSortDirectionException;
 import com.example.emazon.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.example.emazon.configuration.Constants;
 import com.example.emazon.domain.exception.*;
@@ -36,10 +37,22 @@ public class ControllerAdvisor {
         return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleEntityAlreadyExistsException(EntityAlreadyExistsException e) {
+        String errorMessage = String.format(Constants.ENTITY_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getEntityName(), e.getFieldName(), e.getValue());
+        return buildResponse(errorMessage, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException e) {
         String message = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
         return buildResponse(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidSortDirectionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidSortDirectionException() {
+        String errorMessage = Constants.INVALID_SORT_DIRECTION_EXCEPTION_MESSAGE;
+        return buildResponse(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidNumberPageException.class)
@@ -67,8 +80,8 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(ElementNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleElementNotFoundException() {
-        String errorMessage = Constants.ELEMENT_NOT_FOUND_EXCEPTION_MESSAGE;
+    public ResponseEntity<ExceptionResponse> handleElementNotFoundException(ElementNotFoundException e) {
+        String errorMessage = String.format(Constants.ELEMENT_NOT_FOUND_EXCEPTION_MESSAGE,e.getEntity(), e.getField(), e.getValue());
         return buildResponse(errorMessage, HttpStatus.NOT_FOUND);
     }
 
