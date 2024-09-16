@@ -157,7 +157,7 @@ public class CategoryRestControllerAdapter {
         PaginatedResponse<Category> paginatedCategories = categoryServicePort.getAllCategoriesPaginated(paginationRequest);
 
         // Mapear PaginatedResponse<Category> a PaginatedResponseDto<CategoryDto>
-        PaginatedResponseDto<CategoryResponse> responseDto = paginatedResponseMapper.toPaginatedResponseDto(paginatedCategories);
+        PaginatedResponseDto<CategoryResponse> responseDto = paginatedResponseMapper.toCategoryPaginatedResponseDto(paginatedCategories);
 
         return ResponseEntity.ok(responseDto);
     }

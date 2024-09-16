@@ -3,18 +3,24 @@ package com.example.emazon.domain.api.usecase;
 import com.example.emazon.domain.api.IBrandServicePort;
 import com.example.emazon.domain.exception.EmptyFieldException;
 import com.example.emazon.domain.exception.EntityAlreadyExistsException;
+import com.example.emazon.domain.exception.MaxCharAllowedException;
 import com.example.emazon.domain.model.Brand;
+import com.example.emazon.domain.model.PaginatedResponse;
+import com.example.emazon.domain.model.PaginationRequest;
 import com.example.emazon.domain.spi.IBrandPersistentPort;
 import com.example.emazon.domain.util.DomainConstants;
+import com.example.emazon.domain.util.PaginationValidator;
 
 import java.util.List;
 
 public class BrandUseCase implements IBrandServicePort {
 
     private final IBrandPersistentPort brandPersistentPort;
+    private final PaginationValidator paginationValidator;
 
-    public BrandUseCase(IBrandPersistentPort brandPersistentPort) {
+    public BrandUseCase(IBrandPersistentPort brandPersistentPort, PaginationValidator paginationValidator) {
         this.brandPersistentPort = brandPersistentPort;
+        this.paginationValidator = paginationValidator;
     }
 
     @Override
@@ -36,6 +42,12 @@ public class BrandUseCase implements IBrandServicePort {
     @Override
     public List<Brand> getAllBrands() {
         return brandPersistentPort.getAllBrands();
+    }
+
+    @Override
+    public PaginatedResponse<Brand> getAllBrandsPaginated(PaginationRequest paginationRequest) {
+        paginationValidator.validatePaginationRequest(paginationRequest);
+        return brandPersistentPort.getAllBrandsPaginated(paginationRequest);
     }
 
     @Override

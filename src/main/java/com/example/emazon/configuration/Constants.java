@@ -13,7 +13,7 @@ public class Constants {
     public static final String ENTITY_ALREADY_EXISTS_EXCEPTION_MESSAGE = "The %s with the %s: %s already exists";
     public static final String EMPTY_FIELD_EXCEPTION_MESSAGE = "Field %s can not be empty";
     public static final String NEGATIVE_NOT_ALLOWED_EXCEPTION_MESSAGE = "Field %s can not receive negative values";
-    public static final String MAX_CHAR_ALLOWED_EXCEPTION_MESSAGE = "%s";
+    public static final String MAX_CHAR_ALLOWED_EXCEPTION_MESSAGE = "Field %s";
 
     public static final String INVALID_SORT_DIRECTION_EXCEPTION_MESSAGE = "Invalid sort direction. Must be 'ASC' or 'DESC'.";
 

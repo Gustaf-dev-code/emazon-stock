@@ -48,6 +48,6 @@ public class BeanConfiguration {
 
     @Bean
     public IBrandServicePort brandServicePort(){
-        return new BrandUseCase(brandPersistentPort());
+        return new BrandUseCase(brandPersistentPort(), paginationValidator());
     }
 }

@@ -24,6 +24,6 @@ public final class DomainConstants {
     public static final int FIELD_DESCRIPTION_CATEGORY_MAX_SIZE = 90;
     public static final int FIELD_DESCRIPTION_BRAND_MAX_SIZE = 120;
 
-    public static final String FIELD_DESCRIPTION_CATEGORY_SIZE_MESSAGE = "Field 'description' must be between " + FIELD_DESCRIPTION_MIN_SIZE + " and " + FIELD_DESCRIPTION_CATEGORY_MAX_SIZE +" characters";
-    public static final String FIELD_DESCRIPTION_BRAND_SIZE_MESSAGE = "Field 'description' must be between " + FIELD_DESCRIPTION_MIN_SIZE + " and " + FIELD_DESCRIPTION_BRAND_MAX_SIZE +" characters";
+    public static final String FIELD_DESCRIPTION_CATEGORY_SIZE_MESSAGE = "'description' must be between " + FIELD_DESCRIPTION_MIN_SIZE + " and " + FIELD_DESCRIPTION_CATEGORY_MAX_SIZE +" characters";
+    public static final String FIELD_DESCRIPTION_BRAND_SIZE_MESSAGE = "'description' must be between " + FIELD_DESCRIPTION_MIN_SIZE + " and " + FIELD_DESCRIPTION_BRAND_MAX_SIZE +" characters";
 }
